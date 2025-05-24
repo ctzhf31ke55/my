@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MetaMask Donation</title>
+    <!-- Внешние CSS не подключаются, так как стили импортируются через Webpack -->
+  </head>
+  <body>
+    <!-- Контейнер для хедера -->
+    <div id="header"></div>
+
+    <!-- Основной контент -->
+    <div class="container">
+      <h1>MetaMask Donation</h1>
+      <div id="app">
+        <!-- Кнопка для подключения кошелька -->
+        <button class="btn" id="connectWalletBtn">Connect Wallet</button>
+        <div id="donateSection" style="display:none;">
+          <p id="bnbInfo"></p>
+          <p id="tokenInfo"></p>
+          <div id="chart"></div>
+          <button class="btn green" id="confirmButton" style="display:none;">Confirm Donation</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Контейнер для подвала -->
+    <div id="footer"></div>
+    
+    <!-- Собранный бандл -->
+    <script src="bundle.js"></script>
+  </body>
+</html>

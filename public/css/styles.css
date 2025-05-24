@@ -1,0 +1,169 @@
+/* public/css/styles.css */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#bnbInfo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #6b7280;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#tokenInfo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 5px;
+}
+
+#chart {
+    margin: 5px auto;
+    display: inline-block;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: center;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+.btn.green {
+    background-color: #28a745;
+}
+
+.btn.green:hover {
+    background-color: #218838;
+}
+
+#confirmButton {
+    margin-top: 20px;
+}
+
+#connectWalletBtn {
+    margin-top: 20px;
+    font-size: 18px;
+    padding: 10px;
+    color: white;
+    background-color: #00bcd4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+}
+
+#connectWalletBtn:hover {
+    background-color: #0097a7;
+}
+
+/* Стиль для текста на колесе */
+#chart text {
+    font-weight: bold;
+    font-size: 14px;
+    user-select: none;
+    fill: #333;
+    pointer-events: none;
+}
+
+/* Стиль для разделительных полосок */
+#chart path {
+    stroke: #00bcd4;
+    stroke-width: 2px;
+}
+
+/* Стиль для центрального круга и текста "SPIN" */
+.spin-button circle {
+    fill: #00bcd4;
+    transition: fill 0.3s ease, transform 0.1s ease;
+}
+
+.spin-button:hover circle {
+    fill: #0097a7;
+    animation: blink 0.5s infinite alternate;
+}
+
+.spin-button:active circle {
+    transform: scale(0.95);
+}
+
+.spin-button text {
+    fill: white;
+    transition: fill 0.3s ease;
+}
+
+@keyframes blink {
+    from {
+        fill: #00bcd4;
+    }
+    to {
+        fill: #0097a7;
+    }
+}
+
+.spin-button:hover text {
+    fill: white;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px auto;
+        width: 100%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    #bnbInfo, #tokenInfo {
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 8px;
+        font-size: 16px;
+    }
+}
