@@ -44,5 +44,12 @@ export function updateHeaderWalletButton(accounts) {
   button.textContent = shortenedAddress;
 }
 
+export function setHeaderWalletHandler(handler) {
+  const button = document.getElementById('headerConnectWalletBtn');
+  if (button) {
+    button.onclick = handler;
+  }
+}
+
 // Добавляем header один раз при загрузке страницы
 addHeader();
