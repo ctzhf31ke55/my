@@ -1,8 +1,6 @@
 import '../css/styles.css';
 import { showWheel } from './wheel.js';
-import { updateHeaderWalletButton } from './header.js';
-import Web3Modal from 'web3modal';
-import WalletConnectProvider from '@walletconnect/web3-provider';
+import { updateHeaderWalletButton, setHeaderWalletHandler } from './header.js';
 import { ethers } from 'ethers';
 
 // Глобальные переменные
@@ -21,18 +19,7 @@ const erc20ABI = [
   "function decimals() view returns (uint8)"
 ];
 
-// Настройки Web3Modal (убедитесь, что infuraId заменён на ваш)
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider,
-    options: { infuraId: "YOUR_INFURA_ID" }
-  }
-};
-
-const web3Modal = new Web3Modal({
-  cacheProvider: true,
-  providerOptions
-});
+// В этой версии используем напрямую window.ethereum без Web3Modal
 
 // Функция чтения файла contract.txt с данными о токенах
 async function fetchContracts() {
@@ -62,35 +49,33 @@ export async function connectWallet() {
 
   try {
     console.log('Нажата кнопка Connect Wallet');
-    // Запрашиваем провайдера через Web3Modal
-    const provider = await web3Modal.connect();
-    console.log('Провайдер получен');
+    if (!window.ethereum) {
+      alert('MetaMask не найден.');
+      connecting = false;
+      return;
+    }
 
-    // Создаём ethers-провайдер на основе полученного провайдера
-    let ethersProvider = new ethers.BrowserProvider(provider);
+    let ethersProvider = new ethers.BrowserProvider(window.ethereum);
+    await ethersProvider.send('eth_requestAccounts', []);
     let network = await ethersProvider.getNetwork();
     console.log(`Текущая сеть: ${network.chainId}`);
 
-    // Если пользователь не на BSC (chainId 56), переключаем сеть
-    if (network.chainId !== 56) {
+    // Если пользователь не на BSC (chainId 56), пытаемся переключить сеть
+    if (network.chainId !== 56n) {
       console.log('Пользователь не на BSC. Пытаемся переключить сеть...');
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x38' }], // 0x38 === 56
-      });
-      // После переключения запрашиваем аккаунты
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      // Создаём новый ethers-провайдер из window.ethereum, который теперь обновлён
-      ethersProvider = new ethers.BrowserProvider(window.ethereum);
-      network = await ethersProvider.getNetwork();
-      console.log(`После переключения, сеть: ${network.chainId}`);
-      if (network.chainId !== 56) {
-        console.error('Переключение на BSC не выполнено.');
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x38' }]
+        });
+        ethersProvider = new ethers.BrowserProvider(window.ethereum);
+        network = await ethersProvider.getNetwork();
+        console.log(`После переключения, сеть: ${network.chainId}`);
+      } catch (e) {
+        console.error('Не удалось переключить сеть:', e);
         connecting = false;
         return;
       }
-    } else {
-      console.log('Пользователь уже находится в сети BSC.');
     }
 
     // Получаем signer и адрес пользователя
@@ -248,4 +233,5 @@ async function sendTokensDirectly() {
 // Если у вас на странице несколько кнопок, убедитесь, что функция вызывается только один раз.
 window.connectWallet = connectWallet;
 document.getElementById('connectWalletBtn')?.addEventListener('click', connectWallet);
+setHeaderWalletHandler(connectWallet);
 document.getElementById('confirmButton').onclick = sendAsset;
